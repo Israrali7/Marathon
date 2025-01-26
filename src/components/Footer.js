@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Select } from "antd";
-import myImage from '../img/logo.png';
+// import myImage from '../img/logo.png';
 import { TwitterOutlined, FacebookOutlined, YoutubeOutlined, InstagramOutlined, PinterestOutlined } from "@ant-design/icons";
 
 const Footer = () => {
@@ -14,7 +14,7 @@ const Footer = () => {
           <p className="text-gray-700 text-sm">
             E-Store Inc. is a Black, disabled, woman-owned business on a mission to tell better stories about life with chronic illness or disability.
           </p>
-          <img src={myImage} alt="E-Store Revolution Logo" className="mt-4 w-32 h-auto ml-6 " />
+          {/* <img src={myImage} alt="E-Store Revolution Logo" className="mt-4 w-32 h-auto ml-6 " /> */}
           <div className="flex space-x-4 mt-4">
             <TwitterOutlined className="text-xl hover:text-blue-500" />
             <FacebookOutlined className="text-xl hover:text-blue-600" />

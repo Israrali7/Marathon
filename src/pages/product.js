@@ -1,153 +1,57 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Navbar from "../components/navBar";
-import Footer from "../components/Footer";
-import SearchBar from "../components/searchBar";
-import apiInstance from "../config/api/axios";
+import MarriageLoanCard from "../components/Card";
 import { useNavigate } from "react-router-dom";
-import showSwalMessage from "../config/helper/helper";
 
-// const Product = () => {
-//   const [products, setProducts] = useState([]);
-//   const [searchText , setSearchText] = useState('')
-//   const navigate = useNavigate()
-
-//   const getData = () => {
-//     apiInstance.get("products")
-//       .then((res) => {
-//         console.log(res.data.data);
-//         setProducts(res.data.data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-//   const checkLogin = () => {
-//     const token = localStorage.getItem("authToken");
-
-//     if (token) {
-//       showSwalMessage(
-//         "Feature in Progress",
-//         "We are working on this feature. It will be available soon!",
-//         "info"
-//       );
-//     } else {
-//       showSwalMessage("Error", "You need to log in first!", "error");
-//       navigate("/login")
-//     }
-//   }
-//   const search = (e) => {
-//     setSearchText(e.target.value)
-//     console.log(searchText)
-//   }
-
-//   useEffect(() => {
-//     getData();
-//   }, []);
-
-//   return (
-//     <>
-//       <Navbar />
-//       <SearchBar onchange={search} />
-//       <div className="bg-gray-100 py-10 p-28">
-//         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-//           {products.map((product) => (
-//             <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-//               <h1 className="text-xl mt-3">{product.name}</h1>
-//               <div className="p-4">
-//                 <p className="text-gray-600 text-left">{product.description}</p>
-//                 <p className="text-red-600 text-left">{product.price}</p>
-//                 <button className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={checkLogin}>
-//                   Add to Cart
-//                 </button>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//       <Footer />
-//     </>
-//   );
-// };
 const Product = () => {
-  const [products, setProducts] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  // const [userName, setUserName] = useState('');
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+    return (
+        <>
+            <Navbar />
+            <div className="bg-gray-100 py-10 px-6">
+                {/* Heading at the top */}
+                <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
+                    Need Any Kind of Loan?
+                </h1>
 
-  // const getUserDetail = () => {
-  //   apiInstance.get("")
-  //     .then((res) => {
-  //       console.log(res)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }
-
-  const getData = () => {
-    apiInstance.get("products")
-      .then((res) => {
-        setProducts(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const checkLogin = () => {
-    const token = localStorage.getItem("authToken");
-
-    if (token) {
-      showSwalMessage(
-        "Feature in Progress",
-        "We are working on this feature. It will be available soon!",
-        "info"
-      );
-    } else {
-      showSwalMessage("Error", "You need to log in first!", "error");
-      navigate("/login");
-    }
-  };
-
-  const search = (e) => {
-    setSearchText(e.target.value);  // Update search text
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchText.toLowerCase())
-  );
-
-  return (
-    <>
-      <Navbar />
-      <SearchBar onchange={search} />
-      <div className="bg-gray-100 py-10 p-28">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
-            <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <h1 className="text-xl mt-3">{product.name}</h1>
-              <div className="p-4">
-                <p className="text-gray-600 text-left">{product.description}</p>
-                <p className="text-red-600 text-left">{product.price}</p>
-                <button className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onClick={checkLogin}>
-                  Add to Cart
-                </button>
-              </div>
+                {/* Loan Cards Section */}
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <MarriageLoanCard
+                        heading="Home Construction Loans"
+                        image="https://media.istockphoto.com/id/1041465228/photo/professional-engineer-architect-worker-with-protective-helmet-and-blueprints-paper-at-house.jpg?s=612x612&w=0&k=20&c=e84Qt0pHjgcj8Ncj62G_2U4wAECjwIKRfb05obFQwN0="
+                        altText="Home Construction"
+                        description="Build the home of your dreams with our Home Construction Loans. Get the funds you need to cover construction costs without any hassle."
+                        onclick={()=>{navigate("/subForConstr")}}
+                        buttonText="Start Building"
+                    />
+                    <MarriageLoanCard
+                        heading="Wedding Loans"
+                        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJnHJ8RrLzx4Oe6mLalfz-3k9ZkEBQwx3wOg&s"
+                        altText="Wedding"
+                        description="Celebrate your special day with our customized wedding cards, designed to match your theme perfectly."
+                        onclick={()=>{navigate("/subBranch")}}
+                        buttonText="Marriage Loan"
+                    />
+                    <MarriageLoanCard
+                        heading="Business Startup Loans"
+                        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNyKyeTQDkXcGsPlHZ5JwTXK74YWE1lv8LFw&s"
+                        altText="Business Startup"
+                        description="Turn your entrepreneurial vision into reality with our Business Startup Loans. We offer flexible financing to help launch your new venture."
+                        onclick={()=>{navigate("/subForStartup")}}
+                        buttonText="Launch Your Business"
+                    />
+                    <MarriageLoanCard
+                        heading="Education Loans"
+                        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZUVRGUBk5Hz-O_cXDOkH5TDwRdPqQ7sTetA&s"
+                        altText="Education"
+                        description="Invest in your future with our Education Loans. Whether for university or vocational training, we provide the support you need to pursue your studies."
+                        onclick={()=>{navigate("/subForEdu")}}
+                        buttonText="Apply for Education Loan"
+                    />
+                </div>
             </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        {/* <button onClick={getUserDetail}>get data</button> */}
-      </div>
-      <Footer />
-    </>
-  );
+        </>
+    );
 };
 
 export default Product;
