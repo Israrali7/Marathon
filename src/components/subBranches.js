@@ -139,7 +139,7 @@ const SubBranch = ({ subBranches, title }) => {
             {showPopup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
                     <div className={`bg-white p-8 rounded-xl ${popupWidth}`}>
-                        <div className="absolute top-4 right-4 cursor-pointer text-xl" onClick={handleClosePopup}>
+                        <div className="absolute top-20 right-[465px] cursor-pointer text-xl" onClick={handleClosePopup}>
                             <span className="text-red-700 text-5xl">&times;</span>
                         </div>
                         <h2 className="text-2xl font-bold mb-4">Loan Details</h2>
