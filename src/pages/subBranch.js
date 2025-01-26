@@ -26,7 +26,9 @@ export default function SubBranch() {
         window.history.back(); // Go back to the previous page
     };
 
-    const handleClickBranch = () => {
+    const handleClickBranch = (branch) => {
+        // Store branch name in localStorage along with loan data
+        localStorage.setItem("loanFor", branch.name);
         setPopupWidth("w-[480px]"); // Increase the width of the popup when a branch is clicked
         setShowPopup(true); // Show popup on click
     };
@@ -55,9 +57,9 @@ export default function SubBranch() {
         const loan = parseFloat(loanAmount);
         const period = parseInt(loanPeriod);
         const deposit = parseFloat(initialDeposit);
-
+    
         // Validate input values
-        if (isNaN(loan) || isNaN(period) || isNaN(deposit) || loan <= 0 || period <= 0 || deposit <= 0) {
+        if (isNaN(loan) || isNaN(period) || isNaN(deposit)) {
             Swal.fire({
                 title: 'Error!',
                 text: 'Please enter valid values for all fields.',
@@ -66,7 +68,18 @@ export default function SubBranch() {
             });
             return;
         }
-
+    
+        // Further validation checks for positive values
+        if (loan <= 0 || period <= 0 || deposit <= 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please enter valid positive values.',
+                icon: 'error',
+                confirmButtonText: 'Okay'
+            });
+            return;
+        }
+    
         // Check if initial deposit is below the minimum required
         if (deposit < minInitialDeposit) {
             Swal.fire({
@@ -77,7 +90,7 @@ export default function SubBranch() {
             });
             return;
         }
-
+    
         // Check if loan amount exceeds max allowed loan
         if (loan > maxLoanAmount) {
             Swal.fire({
@@ -88,7 +101,7 @@ export default function SubBranch() {
             });
             return;
         }
-
+    
         // Check if loan period exceeds max allowed period
         if (period > maxLoanPeriod) {
             Swal.fire({
@@ -99,27 +112,35 @@ export default function SubBranch() {
             });
             return;
         }
-
+    
         // Loan calculation without interest
         const monthlyPaymentAmount = loan / (period * 12); // Direct calculation without interest
-
+    
         setMonthlyPayment(monthlyPaymentAmount.toFixed(2)); // Set the monthly payment value
-
+    
+        // Get the branch name from localStorage
+        const loanFor = localStorage.getItem("loanFor");
+    
         // Create an object to log the data
         const loanData = {
             initialDeposit: deposit,
             loanAmount: loan,
             loanPeriod: period,
             monthlyPayment: monthlyPaymentAmount.toFixed(2),
+            loanFor: loanFor // Save the branch name in loan data
         };
-
-        // Save loan data to localStorage
+    
+        // Log the loan data to the console
+        console.log("Loan Data to save in LocalStorage:", loanData);
+    
+        // Save loan data to localStorage (make sure to stringify the object)
         localStorage.setItem("loanData", JSON.stringify(loanData));
-
-        // Log the loan data to the console as an object
-        console.log("Loan Data:", loanData);
+    
+        // Log to check if it's saved properly
+        const storedData = localStorage.getItem("loanData");
+        console.log("Stored Data from LocalStorage:", JSON.parse(storedData));
     };
-
+    
     return (
         <div className="bg-gray-100 min-h-screen py-10 px-6">
             <button onClick={handleBackClick} className="text-gray-700 flex items-center mb-8">
@@ -134,7 +155,7 @@ export default function SubBranch() {
                     <div
                         key={index}
                         className="p-6 bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 cursor-pointer"
-                        onClick={handleClickBranch}
+                        onClick={() => handleClickBranch(branch)} // Pass branch here
                     >
                         <h2 className="text-2xl font-bold text-gray-700 mb-2">{branch.name}</h2>
                         <p className="text-gray-600">{branch.description}</p>
@@ -146,7 +167,7 @@ export default function SubBranch() {
             {showPopup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
                     <div className={`bg-white p-8 rounded-xl ${popupWidth}`}>
-                        <div className="absolute top-14 right-[465px] cursor-pointer text-xl" onClick={handleClosePopup}>
+                        <div className="absolute top-4 right-4 cursor-pointer text-xl" onClick={handleClosePopup}>
                             <span className="text-red-700 text-5xl">&times;</span>
                         </div>
                         <h2 className="text-2xl font-bold mb-4">Loan Details</h2>
@@ -197,17 +218,18 @@ export default function SubBranch() {
                         </button>
 
                         {monthlyPayment && (
-                            <div className="mt-4 text-center text-gray-700">
-                                <h3 className="font-bold">Monthly Payment: PKR {monthlyPayment}</h3>
-                            </div>
+                            <>
+                                <div className="mt-4 text-center text-gray-700">
+                                    <h3 className="font-bold">Monthly Payment: PKR {monthlyPayment}</h3>
+                                </div>
+                                <button
+                                    onClick={handleProceedClick}
+                                    className="mt-4 bg-green-500 text-white w-full text-center p-2 rounded"
+                                >
+                                    Proceed
+                                </button>
+                            </>
                         )}
-
-                        <button
-                            onClick={handleProceedClick}
-                            className="mt-4 bg-green-500 text-white w-full text-center p-2 rounded"
-                        >
-                            Proceed
-                        </button>
                     </div>
                 </div>
             )}

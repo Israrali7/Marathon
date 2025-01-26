@@ -8,6 +8,9 @@ const UserForm = () => {
         cnic: "",
     });
 
+    const [loading, setLoading] = useState(false); // For loading state
+    const [emailSent, setEmailSent] = useState(false); // To track email status
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -21,19 +24,34 @@ const UserForm = () => {
         localStorage.setItem("userFormData", JSON.stringify(formData));
 
         try {
+            setLoading(true); // Start loading when submitting the form
             // Send POST request to backend to register user and send verification email
-            const response = await apiInstance.post("/register", formData); // Use the correct endpoint
+            const response = await apiInstance.post("/register", formData); // Correct API endpoint
 
             // Handle success
+            setEmailSent(true); // Mark email as sent
             alert(response.data.message);  // Assuming the backend sends the message as part of response
         } catch (error) {
             // Handle error
             console.error("Error:", error);
             alert("Error sending verification email.");
+        } finally {
+            setLoading(false); // End loading once the request is finished
         }
 
         // Alert message with the form data
         alert(`Form Submitted!\nName: ${formData.name}\nEmail: ${formData.email}\nCNIC: ${formData.cnic}`);
+    };
+
+    const resendEmail = async () => {
+        try {
+            // Send POST request to resend verification email
+            const response = await apiInstance.post("/resend-email", { email: formData.email });
+            alert(response.data.message);  // Assuming the backend sends a message on successful resend
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error resending verification email.");
+        }
     };
 
     return (
@@ -101,12 +119,25 @@ const UserForm = () => {
                 <button
                     type="submit"
                     className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200"
+                    disabled={loading}
                 >
-                    Submit
+                    {loading ? "Submitting..." : "Submit"}
                 </button>
+
+                {/* Resend Email Button */}
+                {emailSent && (
+                    <button
+                        type="button"
+                        onClick={resendEmail}
+                        className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 mt-4"
+                    >
+                        Resend Verification Email
+                    </button>
+                )}
             </form>
         </div>
     );
 };
 
 export default UserForm;
+ 
